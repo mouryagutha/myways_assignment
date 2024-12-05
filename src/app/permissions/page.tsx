@@ -8,19 +8,30 @@ import { LuCast } from "react-icons/lu";
 import { HiSpeakerWave } from "react-icons/hi2";
 
 
+
 const Permissions = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [permissions, setPermissions] = useState({
+  const [permissions, setPermissions] = useState<{
+    microphone: boolean;
+    camera: boolean;
+    screen: boolean;
+    speaker: boolean;
+  }>({
     microphone: false,
     camera: false,
     screen: false,
     speaker: false,
   });
 
-  const steps = ["camera", "microphone", "screen", "speaker"];
+  const steps: (keyof typeof permissions)[] = [
+    "camera",
+    "microphone",
+    "screen",
+    "speaker",
+  ];
   const allPermissionsGranted = Object.values(permissions).every(Boolean);
 
-  const requestPermission = async (step: string) => {
+  const requestPermission = async (step: keyof typeof permissions) => {
     try {
       if (step === "camera") {
         const camStream = await navigator.mediaDevices.getUserMedia({
@@ -63,7 +74,7 @@ const Permissions = () => {
     }
   }, [currentStep]);
 
-  const handleCheckboxClick = async (step: string) => {
+  const handleCheckboxClick = async (step: keyof typeof permissions) => {
     if (!permissions[step]) {
       await requestPermission(step);
     }
@@ -77,10 +88,9 @@ const Permissions = () => {
           <li
             key={step}
             className={`flex items-center gap-4 text-black border w-[400px] h-[60px] justify-between px-6 py-3 rounded-lg 
-              ${
-                permissions[step]
-                  ? "border-green-700 bg-green-200/80"
-                  : "border-red-700 bg-red-200/80"
+                ${permissions[step]
+                ? "border-green-700 bg-green-200/80"
+                : "border-red-700 bg-red-200/80"
               }`}
           >
             <span className="flex items-center gap-2">
@@ -125,6 +135,7 @@ const Permissions = () => {
     </div>
   );
 };
+
 
 const Home = () => {
   const [showPermissions, setShowPermissions] = useState(false);
