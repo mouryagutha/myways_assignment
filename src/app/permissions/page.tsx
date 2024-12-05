@@ -47,7 +47,7 @@ const Permissions = () => {
         await navigator.mediaDevices.getDisplayMedia();
         setPermissions((prev) => ({ ...prev, screen: true }));
       } else if (step === "speaker") {
-        const audio = new Audio("/audiofile2.mp3");
+        const audio = new Audio("/audioclip.mp3");
         audio.play();
         audio.onended = () => {
           setPermissions((prev) => ({ ...prev, speaker: true }));
